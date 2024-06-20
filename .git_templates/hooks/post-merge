@@ -1,0 +1,29 @@
+#! /usr/bin/env sh
+
+# Source vars & functions files
+. ~/.git_templates/_inc/vars.sh
+. ~/.git_templates/_inc/functions.sh
+
+# Local vars
+REF=$(printf "${GIT_REFLOG_ACTION}" | cut -d " " -f2)
+
+case "${REF}" in
+  feature/*)
+    printf "${INFOCOLOR}Update remote ${BRANCH} branch${DFLTCOLOR}\n"
+    git push -u origin ${BRANCH}
+  ;;
+  release/[0-9]*\.[0-9]*\.*[0-9])
+    printf "${INFOCOLOR}Update remote ${BRANCH} branch${DFLTCOLOR}\n"
+    git push -u origin ${BRANCH}
+  ;;
+  [0-9]*\.[0-9]*\.*[0-9])
+    ### git flow release finish
+    printf "${INFOCOLOR}Update remote ${BRANCH} branch${DFLTCOLOR}\n"
+    git push -u origin ${BRANCH}
+    printf "${INFOCOLOR}Create a ${REF} tag${DFLTCOLOR}\n"
+    git push origin ${REF}
+  ;;
+  *)
+    exit 0
+  ;;
+esac

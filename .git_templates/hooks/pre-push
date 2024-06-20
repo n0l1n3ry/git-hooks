@@ -1,0 +1,22 @@
+#! /usr/bin/env sh
+
+# Source vars & functions files
+. ~/.git_templates/_inc/vars.sh
+. ~/.git_templates/_inc/functions.sh
+
+# Here we go
+case "${BRANCH}" in
+  feature/*) # git flow feature publish
+    # MR - target  on defined Git Flow develop branch 
+    mr_count ${DEVELOP_BRANCH}
+    [ "${MR}" -eq 0 ] && create_mr ${DEVELOP_BRANCH} || continue
+  ;;
+  release/*) # git flow release publish
+    # MR - target on defined Git Flow main branch 
+    mr_count ${MASTER_BRANCH}
+    [ "${MR}" -eq 0 ] && create_mr ${MASTER_BRANCH} || continue
+  ;;
+  *)
+    exit 0
+  ;;
+esac
